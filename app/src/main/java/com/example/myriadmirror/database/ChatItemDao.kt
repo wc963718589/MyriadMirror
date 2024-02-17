@@ -10,6 +10,7 @@ import androidx.room.Update
 import com.example.myriadmirror.model.ChatItemAndRole
 import com.example.myriadmirror.model.ChatItemData
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 @Dao
 interface ChatItemDao {
@@ -29,4 +30,13 @@ interface ChatItemDao {
     @Transaction
     @Query("SELECT * from chatItems ORDER BY lastTime DESC")
     fun getAllChatItems(): Flow<List<ChatItemAndRole>>
+
+    @Query("SELECT chatItemId from chatItems WHERE roleId = :roleId")
+    fun getChatItemIdByRoleId(roleId: Int): Int?
+
+    @Query("UPDATE chatItems " +
+            "SET lastContent = :lastContent , " +
+            "lastTime = :lastTime " +
+            "WHERE roleId = :roleId")
+    suspend fun updateLastByRoleId(roleId: Int, lastContent: String, lastTime: LocalDateTime)
 }

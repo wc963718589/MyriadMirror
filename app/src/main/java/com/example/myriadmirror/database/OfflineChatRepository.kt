@@ -1,9 +1,13 @@
 package com.example.myriadmirror.database
 
+import androidx.paging.PagingSource
 import com.example.myriadmirror.model.ChatItemAndRole
+import com.example.myriadmirror.model.ChatItemData
+import com.example.myriadmirror.model.ChatMessageData
 import com.example.myriadmirror.model.ChatMessageWithRole
 import com.example.myriadmirror.model.RoleData
 import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 class OfflineChatRepository(
     private val roleDao: RoleDao,
@@ -21,6 +25,8 @@ class OfflineChatRepository(
 
     override suspend fun updateRole(role: RoleData) = roleDao.update(role)
 
+    override suspend fun insertAllRoles(roles: List<RoleData>) = roleDao.insertAll(roles)
+
     /// ChatItem
     override fun getAllChatItemsStream(): Flow<List<ChatItemAndRole>> =
         chatItemDao.getAllChatItems()
@@ -28,31 +34,58 @@ class OfflineChatRepository(
     override fun getChatItemSteam(chatItemId: Int): Flow<ChatItemAndRole?> =
         chatItemDao.getChatItem(chatItemId)
 
-    override suspend fun insertChatItem(chatItemAndRole: ChatItemAndRole) =
-        chatItemDao.insert(chatItemAndRole.chatItem)
+    override suspend fun insertChatItem(chatItem: ChatItemData) =
+        chatItemDao.insert(chatItem)
 
-    override suspend fun deleteChatItem(chatItemAndRole: ChatItemAndRole) =
-        chatItemDao.delete(chatItemAndRole.chatItem)
+    override suspend fun deleteChatItem(chatItem: ChatItemData) =
+        chatItemDao.delete(chatItem)
 
-    override suspend fun updateChatItem(chatItemAndRole: ChatItemAndRole) =
-        chatItemDao.update(chatItemAndRole.chatItem)
+    override suspend fun updateChatItem(chatItem: ChatItemData) =
+        chatItemDao.update(chatItem)
+
+    override suspend fun getChatItemIdByRoleId(roleId: Int) =
+        chatItemDao.getChatItemIdByRoleId(roleId)
 
     /// ChatMessage
-    override fun getChatMessagesStream(
-        roleId: Int,
-        limit: Int,
-        offset: Int
-    ): Flow<List<ChatMessageWithRole>> = chatMessageDao.getChatMessages(roleId, limit, offset)
+    override fun getAllChatMessagesStream(
+        roleId: Int
+    ): PagingSource<Int, ChatMessageWithRole> = chatMessageDao.getAllChatMessages(roleId)
+
+    override suspend fun getContextTokens(roleId: Int, tokenSize: Int): List<ChatMessageData> =
+        chatMessageDao.getContextTokens(roleId, tokenSize)
 
     override fun getSingleChatMessageSteam(messageId: Int): Flow<ChatMessageWithRole?> =
         chatMessageDao.getSingleChatMessage(messageId)
 
-    override suspend fun insertChatMessage(chatMessageWithRole: ChatMessageWithRole) =
-        chatMessageDao.insert(chatMessageWithRole.chatMessage)
+    override suspend fun insertChatMessage(chatMessage: ChatMessageData) {
+        chatMessageDao.insert(chatMessage)
+        chatItemDao.updateLastByRoleId(
+            roleId = chatMessage.roleId,
+            lastContent = chatMessage.content,
+            lastTime = chatMessage.time
+        )
+    }
 
-    override suspend fun deleteChatMessage(chatMessageWithRole: ChatMessageWithRole) =
+    override suspend fun deleteChatMessage(chatMessageWithRole: ChatMessageWithRole, isLast: Boolean) {
         chatMessageDao.delete(chatMessageWithRole.chatMessage)
+        if (isLast) {
+            chatItemDao.updateLastByRoleId(
+                roleId = chatMessageWithRole.role.roleId,
+                lastContent = "",
+                lastTime = LocalDateTime.now()
+            )
+        }
+    }
 
-    override suspend fun updateChatMessage(chatMessageWithRole: ChatMessageWithRole) =
-        chatMessageDao.update(chatMessageWithRole.chatMessage)
+    override suspend fun deleteChatMessageByRoleId(roleId: Int) {
+        chatMessageDao.deleteAllByRoleId(roleId)
+        chatItemDao.updateLastByRoleId(
+            roleId = roleId,
+            lastContent = "",
+            lastTime = LocalDateTime.now()
+        )
+    }
+
+    override suspend fun updateChatMessage(chatMessage: ChatMessageData) =
+        chatMessageDao.update(chatMessage)
 }

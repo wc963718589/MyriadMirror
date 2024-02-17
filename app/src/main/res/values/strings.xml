@@ -6,10 +6,14 @@
     <string name="chat_list_empty_hint">选择一个角色开始聊天吧~</string>
     <string name="role_list_empty_hint">点击“+”创建一个角色开始聊天吧~</string>
     <string name="role_detail_title">角色设置</string>
-
     <string name="back">back</string>
     <string name="avatar_image">avatar image</string>
-    <string name="set_role">set_role</string>
+    <string name="set_role">set role</string>
+    <string name="clear_messages">clear messages</string>
+    <string name="clear_messages_title">清空</string>
+    <string name="clear_messages_context">此操作将永久删除该角色的内容。您确定要继续吗？</string>
+    <string name="clear_messages_confirm">清空</string>
+    <string name="clear_messages_cancel">取消</string>
     <string name="create_role">create role</string>
     <string name="confirm_role_setting">confirm role setting</string>
     <string name="set_role_name_title">角色名称</string>
@@ -20,4 +24,18 @@
     <string name="set_role_description_hint">你是一个翻译员，你的工作是翻译中文到英文</string>
     <string name="empty_name_default">未命名</string>
     <string name="delete">删除</string>
+    <string name="send">发送</string>
+    <string name="setting_api_key_title">密钥设置</string>
+    <string name="setting_model_title">模型设置</string>
+    <string name="confirm_api_key_setting">confirm api key setting</string>
+    <string name="confirm_model_setting">confirm model setting</string>
+    <string name="set_base_url_title">API 域名</string>
+    <string name="set_base_url_hint">https://api.openai.com</string>
+    <string name="set_api_key_title">OPEN API 密钥</string>
+    <string name="set_api_key_hint">sk-xxxxxxxxxxxxxxxx</string>
+    <string name="set_model_title">模型</string>
+    <string name="temperature_title">严谨与想象(Temperature)</string>
+    <string name="temperature_left_label">严谨细致</string>
+    <string name="temperature_right_label">想象发散</string>
+    <string name="top_p_title">Top P</string>
 </resources>

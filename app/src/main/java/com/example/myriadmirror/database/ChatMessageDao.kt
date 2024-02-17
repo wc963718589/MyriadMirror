@@ -1,5 +1,6 @@
 package com.example.myriadmirror.database
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -30,8 +31,17 @@ interface ChatMessageDao {
     @Query("SELECT * " +
             "from chatMessages " +
             "WHERE roleId = :roleId " +
+            "ORDER BY messageId DESC ")
+    fun getAllChatMessages(roleId: Int): PagingSource<Int, ChatMessageWithRole>
+
+    @Query("SELECT * " +
+            "from chatMessages " +
+            "WHERE roleId = :roleId " +
+            "AND isError = 0 " +
             "ORDER BY messageId DESC " +
-            "LIMIT :limit " +
-            "OFFSET :offset")
-    fun getChatMessages(roleId: Int, limit: Int, offset: Int): Flow<List<ChatMessageWithRole>>
+            "LIMIT :tokenSize")
+    suspend fun getContextTokens(roleId: Int, tokenSize: Int): List<ChatMessageData>
+
+    @Query("DELETE FROM chatMessages WHERE roleId = :roleId")
+    suspend fun deleteAllByRoleId(roleId: Int)
 }

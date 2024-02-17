@@ -8,6 +8,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import java.sql.Date
 import java.sql.Timestamp
+import java.time.LocalDateTime
 
 /// 聊天列表数据
 @Entity(
@@ -22,10 +23,8 @@ import java.sql.Timestamp
 )
 data class ChatItemData(
     @PrimaryKey(autoGenerate = true)
-    val chatItemId: Int,        // 聊天列表ID
+    val chatItemId: Int = 0,    // 聊天列表ID
     val roleId: Int,            // 聊天对象ID
     val lastContent: String,    // 最后一条内容
-    val lastTime: Date          // 最后一条时间
-
-
+    val lastTime: LocalDateTime // 最后一条时间
 )

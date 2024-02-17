@@ -28,6 +28,18 @@ sealed class Screen(
         fun createRoute(roleId: Int) = "roleDetail/$roleId"
     }
 
+    data object ApiKeySetting: Screen(
+        route = "apiKeySetting"
+    ) {
+        fun createRoute() = "apiKeySetting"
+    }
+
+    data object ModelSetting: Screen(
+        route = "modelSetting"
+    ) {
+        fun createRoute() = "modelSetting"
+    }
+
     companion object {
         const val roleId: String = "roleId"
     }

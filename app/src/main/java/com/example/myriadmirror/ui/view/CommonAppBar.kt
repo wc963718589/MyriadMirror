@@ -3,6 +3,7 @@ package com.example.myriadmirror.ui.view
 
 import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +48,8 @@ fun CommonAppBar(
     ) {
         if (onBackClick != null || actionIcon != null)
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 16.dp)) {
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(horizontal = 8.dp)) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_back),
                     contentDescription = stringResource(R.string.back),
@@ -61,8 +63,7 @@ fun CommonAppBar(
                 Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     content()
                 }
-                if (actionIcon != null)
-                actionIcon()
+                if (actionIcon != null) actionIcon()
             }
         else content()
     }

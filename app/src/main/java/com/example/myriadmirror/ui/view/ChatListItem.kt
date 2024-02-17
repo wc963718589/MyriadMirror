@@ -21,57 +21,62 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.example.myriadmirror.R
 import com.example.myriadmirror.model.ChatItemAndRole
+import com.example.myriadmirror.model.ChatItemData
+import com.example.myriadmirror.model.RoleData
 import com.example.myriadmirror.ui.theme.TextColorBlack
 import com.example.myriadmirror.ui.theme.TextColorGrey
+import com.example.myriadmirror.util.formatDateTime
 
 
 @Composable
 fun ChatListItem(
     data: ChatItemAndRole,
-    onItemClick: (roleId: Int) -> Unit = {}) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(80.dp)
-            .clickable {
-              onItemClick(data.role.roleId)
-            }
-            .padding(12.dp)
+    onItemClick: () -> Unit = {},
+    popupItems: @Composable () -> Unit = {}) {
+    PopUpMenuContainer(
+        onClick = onItemClick,
+        popupItems = popupItems
     ) {
-        AvatarImage(
-            model = data.role.avatar,
-            size = 56.dp
-        )
-        Column(
-            modifier = Modifier.padding(start = 16.dp)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp)
+                .padding(12.dp)
         ) {
-            Row {
-                Text(
-                    text = data.role.name.ifEmpty { stringResource(R.string.empty_name_default) },
+            AvatarImage(
+                model = data.role.avatar,
+             )
+            Column(
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
+                Row {
+                    Text(
+                        text = data.role.name.ifEmpty { stringResource(R.string.empty_name_default) },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp,
+                        lineHeight = 1.5.em,
+                        color = TextColorBlack,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 8.dp))
+                    Text(
+                        text = data.chatItem.lastTime.formatDateTime(),
+                        fontSize = 14.sp,
+                        lineHeight = 1.5.em,
+                        color = TextColorGrey)
+                }
+                Text(text = data.chatItem.lastContent,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    fontWeight = FontWeight.SemiBold,
                     fontSize = 16.sp,
-                    lineHeight = 1.5.em,
-                    color = TextColorBlack,
+                    lineHeight = 2.em,
+                    color = TextColorGrey,
                     modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp))
-                Text(
-                    text = data.chatItem.lastTime.toString(),// TODO: DateFormat
-                    fontSize = 14.sp,
-                    lineHeight = 1.5.em,
-                    color = TextColorGrey)
+                        .padding(top = 4.dp))
             }
-            Text(text = data.chatItem.lastContent,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                fontSize = 16.sp,
-                lineHeight = 2.em,
-                color = TextColorGrey,
-                modifier = Modifier
-                    .padding(top = 4.dp))
         }
     }
 }

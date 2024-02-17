@@ -30,7 +30,6 @@ import com.example.myriadmirror.ui.view.BottomNavigationBar
 import com.example.myriadmirror.ui.view.CommonAppBar
 import com.example.myriadmirror.util.Constants
 import com.example.myriadmirror.viewModel.HomeViewModel
-import com.example.myriadmirror.viewModel.ViewModelProvider
 import kotlinx.coroutines.launch
 
 
@@ -40,7 +39,9 @@ fun HomeScreen(
     onChatClick: (id: Int) -> Unit = {},
     onRoleClick: (id: Int) -> Unit = {},
     onAddRoleClick: () -> Unit = {},
-    viewModel: HomeViewModel = viewModel(factory = ViewModelProvider.Factory)
+    onApiKeyClick: () -> Unit = {},
+    onModelClick: () -> Unit = {},
+    viewModel: HomeViewModel = viewModel()
 ) {
     val pagerState = rememberPagerState(initialPage = viewModel.currentIndex) {
         Constants.BOTTOM_NAVIGATION_ITEMS.size
@@ -90,7 +91,7 @@ fun HomeScreen(
             when (index) {
                 0 -> ChatListScreen(onChatClick = onChatClick)
                 1 -> RoleListScreen(onRoleClick = onRoleClick)
-                2 -> SettingScreen()
+                2 -> SettingScreen(onApiKeyClick = onApiKeyClick, onModelClick = onModelClick)
             }
         }
     }

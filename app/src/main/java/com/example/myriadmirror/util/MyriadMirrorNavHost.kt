@@ -17,8 +17,10 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.myriadmirror.ui.screen.ApiKeySettingScreen
 import com.example.myriadmirror.ui.screen.ChatDetailScreen
 import com.example.myriadmirror.ui.screen.HomeScreen
+import com.example.myriadmirror.ui.screen.ModelSettingScreen
 import com.example.myriadmirror.ui.screen.RoleDetailScreen
 
 @Composable
@@ -57,6 +59,16 @@ fun MyriadMirrorNavHost(
                     navController.navigate(
                         Screen.RoleDetail.createRoute(Constants.CREATE_ROLE_ID)
                     )
+                },
+                onApiKeyClick = {
+                    navController.navigate(
+                        Screen.ApiKeySetting.createRoute()
+                    )
+                },
+                onModelClick = {
+                    navController.navigate(
+                        Screen.ModelSetting.createRoute()
+                    )
                 }
             )
         }
@@ -78,6 +90,20 @@ fun MyriadMirrorNavHost(
             arguments = Screen.RoleDetail.navArguments
         ) {
             RoleDetailScreen(
+                navigationUp = { navController.navigateUp() },
+            )
+        }
+        composable(
+            route = Screen.ApiKeySetting.route
+        ) {
+            ApiKeySettingScreen(
+                navigationUp = { navController.navigateUp() },
+            )
+        }
+        composable(
+            route = Screen.ModelSetting.route
+        ) {
+            ModelSettingScreen(
                 navigationUp = { navController.navigateUp() },
             )
         }

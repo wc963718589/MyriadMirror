@@ -11,11 +11,15 @@ import com.example.myriadmirror.model.ChatItemAndRole
 import com.example.myriadmirror.model.RoleData
 import com.example.myriadmirror.util.Constants
 import com.example.myriadmirror.util.Screen
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RoleDetailViewModel(
+@HiltViewModel
+class RoleDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val chatRepository: ChatRepository,
 ): ViewModel() {
@@ -25,7 +29,7 @@ class RoleDetailViewModel(
         private set
 
     init {
-        if (!isCreating()) viewModelScope.launch {
+        if (!isCreating()) viewModelScope.launch(Dispatchers.IO) {
             roleDetailUiState = chatRepository.getRoleSteam(roleId)
                 .filterNotNull()
                 .first()

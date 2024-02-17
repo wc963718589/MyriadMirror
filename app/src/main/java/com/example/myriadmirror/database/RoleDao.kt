@@ -25,4 +25,7 @@ interface RoleDao {
 
     @Query("SELECT * from roles ORDER BY roleId ASC")
     fun getAllRoles(): Flow<List<RoleData>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAll(roles: List<RoleData>)
 }
